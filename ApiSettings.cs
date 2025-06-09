@@ -5,6 +5,7 @@ public static class ApiSettings
     public static string Key => $"{nameof( ApiSettings )}:Key";
     public static string Issuer => $"{nameof( ApiSettings )}:Issuer";
     public static string Audience => $"{nameof( ApiSettings )}:Audience";
+    public static string LogFilePath => $"{nameof( ApiSettings )}:LogFilePath";
 
     public static string BuildJwtKey( string? secret )
     {
