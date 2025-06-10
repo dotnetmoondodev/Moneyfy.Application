@@ -4,7 +4,7 @@ namespace Application.Payments;
 
 public static class PaymentExtesions
 {
-    public static IServiceCollection AddPaymentServices( this IServiceCollection services )
+    public static IServiceCollection AddApplicationServices( this IServiceCollection services )
     {
         services.AddScoped<ICreateCommandHandler, CreateCommandHandler>();
         services.AddScoped<IUpdateCommandHandler, UpdateCommandHandler>();

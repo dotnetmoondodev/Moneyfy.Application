@@ -4,7 +4,7 @@ namespace Application.Notifications;
 
 public static class NotificationExtesions
 {
-    public static IServiceCollection AddNotificationServices( this IServiceCollection services )
+    public static IServiceCollection AddApplicationServices( this IServiceCollection services )
     {
         services.AddScoped<ICreateCommandHandler, CreateCommandHandler>();
         services.AddScoped<IUpdateCommandHandler, UpdateCommandHandler>();

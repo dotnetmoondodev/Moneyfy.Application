@@ -4,7 +4,7 @@ namespace Application.Incomes;
 
 public static class IncomeExtesions
 {
-    public static IServiceCollection AddIncomeServices( this IServiceCollection services )
+    public static IServiceCollection AddApplicationServices( this IServiceCollection services )
     {
         services.AddScoped<ICreateCommandHandler, CreateCommandHandler>();
         services.AddScoped<IUpdateCommandHandler, UpdateCommandHandler>();

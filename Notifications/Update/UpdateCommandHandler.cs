@@ -58,8 +58,8 @@ internal class UpdateCommandValidator: AbstractValidator<UpdateCommand>
 
         RuleFor( x => x.DateToSend )
             .NotNull()
-            .Must( x => x > DateTimeOffset.MinValue )
-            .WithMessage( "DateToSend is required and must be a valid DateTimeOffset." );
+            .Must( x => x > DateTimeOffset.Now )
+            .WithMessage( "DateToSend is required and must be a future date." );
 
         RuleFor( x => x.HourToSend )
             .NotNull()
@@ -93,7 +93,7 @@ internal class UpdateCommandValidator: AbstractValidator<UpdateCommand>
 
         RuleFor( x => x.PhoneNumber )
             .Matches( @"^\+?[1-9]\d{1,14}$" )
-            .When( x => x.Method == NotificationMethod.Sms )
+            .When( x => x.Method == NotificationMethod.Sms || x.Method == NotificationMethod.PushNotification )
             .WithMessage( "PhoneNumber is required and must be a valid phone number." );
     }
 }

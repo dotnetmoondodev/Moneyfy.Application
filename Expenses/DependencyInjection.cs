@@ -4,7 +4,7 @@ namespace Application.Expenses;
 
 public static class ExpenseExtensions
 {
-    public static IServiceCollection AddExpenseServices( this IServiceCollection services )
+    public static IServiceCollection AddApplicationServices( this IServiceCollection services )
     {
         services.AddScoped<ICreateCommandHandler, CreateCommandHandler>();
         services.AddScoped<IUpdateCommandHandler, UpdateCommandHandler>();
