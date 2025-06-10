@@ -4,6 +4,8 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <AssemblyName>Moneyfy.Application</AssemblyName>
+        <RootNamespace>Application</RootNamespace>
         <Authors>MoonDoDev - Hector Gomez</Authors>
         <Version>1.0.1</Version>
     </PropertyGroup>
@@ -14,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Moneyfy.Domain\Moneyfy.Domain.csproj" />
+        <ProjectReference Include="..\Domain\Domain.csproj" />
     </ItemGroup>
 
 </Project>
