@@ -23,8 +23,7 @@ public static class LoggerSettings
 
 public static class ApiSettings
 {
-    public static string Key => $"{nameof( ApiSettings )}:Key";
-    public static string Issuer => $"{nameof( ApiSettings )}:Issuer";
+    public static string Authority => $"{nameof( ApiSettings )}:Authority";
     public static string Audience => $"{nameof( ApiSettings )}:Audience";
     public static string DBConnection => $"{nameof( ApiSettings )}:DBConnection";
 
