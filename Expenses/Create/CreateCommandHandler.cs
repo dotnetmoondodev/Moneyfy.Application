@@ -4,13 +4,13 @@ using FluentValidation;
 
 namespace Application.Expenses;
 
-public interface ICreateCommandHandler: ICommandHandler<CreateCommand, Expense> { }
+public interface ICreateCommandHandler: ICommandHandler<CreateCommand> { }
 
 public sealed class CreateCommandHandler(
     IExpensesRepository repository )
     : ICreateCommandHandler
 {
-    public async Task<Expense> Execute( CreateCommand command, CancellationToken cancellationToken = default )
+    public async Task Execute( CreateCommand command, CancellationToken cancellationToken = default )
     {
         ArgumentNullException.ThrowIfNull( command );
 
@@ -22,9 +22,7 @@ public sealed class CreateCommandHandler(
             throw new ValidationException( result.Errors );
         }
 
-        var expense = command.MapToExpense();
-        await repository.AddAsync( expense, cancellationToken );
-        return expense;
+        await repository.AddAsync( command.MapToExpense(), cancellationToken );
     }
 }
 

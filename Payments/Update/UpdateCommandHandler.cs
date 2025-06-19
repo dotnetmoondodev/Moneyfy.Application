@@ -4,13 +4,13 @@ using FluentValidation;
 
 namespace Application.Payments;
 
-public interface IUpdateCommandHandler: ICommandHandler<UpdateCommand, Payment> { }
+public interface IUpdateCommandHandler: ICommandHandler<UpdateCommand> { }
 
 public sealed class UpdateCommandHandler(
     IPaymentsRepository repository )
     : IUpdateCommandHandler
 {
-    public async Task<Payment> Execute( UpdateCommand command, CancellationToken cancellationToken = default )
+    public async Task Execute( UpdateCommand command, CancellationToken cancellationToken = default )
     {
         ArgumentNullException.ThrowIfNull( command );
 
@@ -33,7 +33,6 @@ public sealed class UpdateCommandHandler(
             command.PaymentMediaReference );
 
         await repository.UpdateAsync( payment, cancellationToken );
-        return payment;
     }
 }
 

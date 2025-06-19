@@ -1,16 +1,18 @@
 using Application.Abstractions;
 using Domain.Notifications;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Notifications;
 
-public interface IQueryOneHandler: IQueryHandler<GetByIdQuery, Notification> { }
+public interface IQueryOneHandler: IQueryHandler<GetByIdQuery, NotificationsResponse> { }
 
 public sealed class GetByIdQueryHandler(
-    INotificationsRepository repository )
+    IAppDbContext dbContext )
     : IQueryOneHandler
 {
-    public async Task<Notification> Execute( GetByIdQuery query, CancellationToken cancellationToken = default )
+    public async Task<NotificationsResponse> Execute(
+        GetByIdQuery query, CancellationToken cancellationToken = default )
     {
         ArgumentNullException.ThrowIfNull( query );
 
@@ -22,8 +24,25 @@ public sealed class GetByIdQueryHandler(
             throw new ValidationException( result.Errors );
         }
 
-        var notification = await repository.GetByIdAsync( query.Id, cancellationToken ) ??
-            throw new NotFoundNotificationException( query.Id );
+        var notification = await dbContext.Notifications
+            .Where( item => item.Id == query.Id )
+            .Select( item => new NotificationsResponse()
+            {
+                Id = item.Id,
+                Description = item.Description,
+                CreationDate = item.CreationDate,
+                DateToSend = item.DateToSend,
+                HourToSend = item.HourToSend,
+                Frequency = item.Frequency,
+                Method = item.Method,
+                PaymentId = item.PaymentId,
+                Repeatable = item.Repeatable,
+                Enable = item.Enable,
+                Email = item.Email,
+                PhoneNumber = item.PhoneNumber
+            } )
+            .FirstOrDefaultAsync( cancellationToken ) ??
+                throw new NotFoundNotificationException( query.Id );
 
         return notification;
     }

@@ -4,13 +4,13 @@ using FluentValidation;
 
 namespace Application.Expenses;
 
-public interface IUpdateCommandHandler: ICommandHandler<UpdateCommand, Expense> { }
+public interface IUpdateCommandHandler: ICommandHandler<UpdateCommand> { }
 
 public sealed class UpdateCommandHandler(
     IExpensesRepository repository )
     : IUpdateCommandHandler
 {
-    public async Task<Expense> Execute( UpdateCommand command, CancellationToken cancellationToken = default )
+    public async Task Execute( UpdateCommand command, CancellationToken cancellationToken = default )
     {
         ArgumentNullException.ThrowIfNull( command );
 
@@ -30,7 +30,6 @@ public sealed class UpdateCommandHandler(
             command.Value );
 
         await repository.UpdateAsync( expense, cancellationToken );
-        return expense;
     }
 }
 

@@ -4,13 +4,13 @@ using FluentValidation;
 
 namespace Application.Payments;
 
-public interface ICreateCommandHandler: ICommandHandler<CreateCommand, Payment> { }
+public interface ICreateCommandHandler: ICommandHandler<CreateCommand> { }
 
 public sealed class CreateCommandHandler(
     IPaymentsRepository repository )
     : ICreateCommandHandler
 {
-    public async Task<Payment> Execute( CreateCommand command, CancellationToken cancellationToken = default )
+    public async Task Execute( CreateCommand command, CancellationToken cancellationToken = default )
     {
         ArgumentNullException.ThrowIfNull( command );
 
@@ -22,9 +22,7 @@ public sealed class CreateCommandHandler(
             throw new ValidationException( result.Errors );
         }
 
-        var payment = command.MapToPayment();
-        await repository.AddAsync( payment, cancellationToken );
-        return payment;
+        await repository.AddAsync( command.MapToPayment(), cancellationToken );
     }
 }
 

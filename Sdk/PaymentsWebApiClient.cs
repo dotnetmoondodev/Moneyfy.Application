@@ -8,35 +8,45 @@ public class PaymentsWebApiClient( HttpClient httpClient )
 {
     public async Task<Payment?> GetPaymentAsync( Guid id )
     {
-        var response = await httpClient.GetAsync( ApiEndpoints.Payments.GetOne );
+        var response = await httpClient.GetAsync(
+            $"{ApiEndpoints.MapVersion( ApiEndpoints.Payments.Base )}/{id}" );
+
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync<Payment>();
     }
 
     public async Task<IEnumerable<Payment>> GetPaymentsAsync()
     {
-        var response = await httpClient.GetAsync( ApiEndpoints.Payments.GetAll );
+        var response = await httpClient.GetAsync(
+            ApiEndpoints.MapVersion( ApiEndpoints.Payments.GetAll ) );
+
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync<IEnumerable<Payment>>() ?? [];
     }
 
     public async Task<Payment?> CreatePaymentAsync( CreateCommand request )
     {
-        var response = await httpClient.PostAsJsonAsync( ApiEndpoints.Payments.Create, request );
+        var response = await httpClient.PostAsJsonAsync(
+            ApiEndpoints.MapVersion( ApiEndpoints.Payments.Create ), request );
+
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync<Payment>();
     }
 
     public async Task<Payment?> UpdatePaymentAsync( UpdateCommand request )
     {
-        var response = await httpClient.PutAsJsonAsync( ApiEndpoints.Payments.Update, request );
+        var response = await httpClient.PutAsJsonAsync(
+            ApiEndpoints.MapVersion( ApiEndpoints.Payments.Update ), request );
+
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadFromJsonAsync<Payment>();
     }
 
     public async Task DeletePaymentAsync( Guid id )
     {
-        var response = await httpClient.DeleteAsync( ApiEndpoints.Payments.Delete );
+        var response = await httpClient.DeleteAsync(
+            $"{ApiEndpoints.MapVersion( ApiEndpoints.Payments.Base )}/{id}" );
+
         response.EnsureSuccessStatusCode();
     }
 }

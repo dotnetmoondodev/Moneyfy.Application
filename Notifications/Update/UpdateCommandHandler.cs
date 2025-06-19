@@ -5,13 +5,13 @@ using FluentValidation;
 
 namespace Application.Notifications;
 
-public interface IUpdateCommandHandler: ICommandHandler<UpdateCommand, Notification> { }
+public interface IUpdateCommandHandler: ICommandHandler<UpdateCommand> { }
 
 public sealed class UpdateCommandHandler(
     INotificationsRepository repository )
     : IUpdateCommandHandler
 {
-    public async Task<Notification> Execute( UpdateCommand command, CancellationToken cancellationToken = default )
+    public async Task Execute( UpdateCommand command, CancellationToken cancellationToken = default )
     {
         ArgumentNullException.ThrowIfNull( command );
 
@@ -39,7 +39,6 @@ public sealed class UpdateCommandHandler(
             command.PhoneNumber );
 
         await repository.UpdateAsync( notification, cancellationToken );
-        return notification;
     }
 }
 

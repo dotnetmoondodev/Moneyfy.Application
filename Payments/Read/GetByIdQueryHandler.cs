@@ -1,16 +1,18 @@
 using Application.Abstractions;
 using Domain.Payments;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Payments;
 
-public interface IQueryOneHandler: IQueryHandler<GetByIdQuery, Payment> { }
+public interface IQueryOneHandler: IQueryHandler<GetByIdQuery, PaymentsResponse> { }
 
 public sealed class GetByIdQueryHandler(
-    IPaymentsRepository repository )
+    IAppDbContext dbContext )
     : IQueryOneHandler
 {
-    public async Task<Payment> Execute( GetByIdQuery query, CancellationToken cancellationToken = default )
+    public async Task<PaymentsResponse> Execute(
+        GetByIdQuery query, CancellationToken cancellationToken = default )
     {
         ArgumentNullException.ThrowIfNull( query );
 
@@ -22,8 +24,20 @@ public sealed class GetByIdQueryHandler(
             throw new ValidationException( result.Errors );
         }
 
-        var payment = await repository.GetByIdAsync( query.Id, cancellationToken ) ??
-            throw new NotFoundPaymentException( query.Id );
+        var payment = await dbContext.Payments
+            .Where( item => item.Id == query.Id )
+            .Select( item => new PaymentsResponse()
+            {
+                Id = item.Id,
+                Description = item.Description,
+                Value = item.Value,
+                CreationDate = item.CreationDate,
+                Currency = item.Currency,
+                IsAutoDebit = item.IsAutoDebit,
+                PaymentMediaReference = item.PaymentMediaReference
+            } )
+            .FirstOrDefaultAsync( cancellationToken ) ??
+                throw new NotFoundPaymentException( query.Id );
 
         return payment;
     }

@@ -1,17 +1,28 @@
 using Application.Abstractions;
-using Domain.Payments;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Payments;
 
-public interface IQueryAllHandler : IQueryHandler<IEnumerable<Payment>> { }
+public interface IQueryAllHandler: IQueryHandler<IEnumerable<PaymentsResponse>> { }
 
-internal sealed class GetAllQueryHandler( 
-	IAppDbContext appDbContext )
+internal sealed class GetAllQueryHandler(
+    IAppDbContext dbContext )
     : IQueryAllHandler
 {
-	public async Task<IEnumerable<Payment>> Execute( CancellationToken cancellationToken = default )
-	{
-		return await appDbContext.Payments.ToListAsync( cancellationToken );
-	}
+    public async Task<IEnumerable<PaymentsResponse>> Execute(
+        CancellationToken cancellationToken = default )
+    {
+        return await dbContext.Payments
+            .Select( item => new PaymentsResponse()
+            {
+                Id = item.Id,
+                Description = item.Description,
+                Value = item.Value,
+                CreationDate = item.CreationDate,
+                Currency = item.Currency,
+                IsAutoDebit = item.IsAutoDebit,
+                PaymentMediaReference = item.PaymentMediaReference
+            } )
+            .ToListAsync( cancellationToken );
+    }
 }

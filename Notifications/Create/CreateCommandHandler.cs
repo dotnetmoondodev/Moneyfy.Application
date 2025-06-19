@@ -5,13 +5,13 @@ using FluentValidation;
 
 namespace Application.Notifications;
 
-public interface ICreateCommandHandler: ICommandHandler<CreateCommand, Notification> { }
+public interface ICreateCommandHandler: ICommandHandler<CreateCommand> { }
 
 public sealed class CreateCommandHandler(
     INotificationsRepository repository )
     : ICreateCommandHandler
 {
-    public async Task<Notification> Execute( CreateCommand command, CancellationToken cancellationToken = default )
+    public async Task Execute( CreateCommand command, CancellationToken cancellationToken = default )
     {
         ArgumentNullException.ThrowIfNull( command );
 
@@ -23,9 +23,7 @@ public sealed class CreateCommandHandler(
             throw new ValidationException( result.Errors );
         }
 
-        var notification = command.MapToNotification();
-        await repository.AddAsync( notification, cancellationToken );
-        return notification;
+        await repository.AddAsync( command.MapToNotification(), cancellationToken );
     }
 }
 
