@@ -1,52 +1,48 @@
 using System.Net.Http.Json;
 using Application.Payments;
-using Domain.Payments;
 
 namespace Application.Sdk;
 
 public class PaymentsWebApiClient( HttpClient httpClient )
 {
-    public async Task<Payment?> GetPaymentAsync( Guid id )
+    public async Task<PaymentsResponse?> GetPaymentAsync( Guid id )
     {
+        // We're using the WebApiIdRoute to ensure that the request is routed 
+        // correctly through the API Gateway (Yarp Reverse Proxy).
         var response = await httpClient.GetAsync(
-            $"{ApiEndpoints.MapVersion( ApiEndpoints.Payments.Base )}/{id}" );
+            $"{ApiEndpoints.WebApiIdRoute}/{ApiEndpoints.MapVersion( ApiEndpoints.Payments.Base )}/{id}" );
 
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<Payment>();
+        return await response.Content.ReadFromJsonAsync<PaymentsResponse>();
     }
 
-    public async Task<IEnumerable<Payment>> GetPaymentsAsync()
+    public async Task<IEnumerable<PaymentsResponse>> GetPaymentsAsync()
     {
         var response = await httpClient.GetAsync(
-            ApiEndpoints.MapVersion( ApiEndpoints.Payments.GetAll ) );
+            $"{ApiEndpoints.WebApiIdRoute}/{ApiEndpoints.MapVersion( ApiEndpoints.Payments.GetAll )}" );
 
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<IEnumerable<Payment>>() ?? [];
+        return await response.Content.ReadFromJsonAsync<IEnumerable<PaymentsResponse>>() ?? [];
     }
 
-    public async Task<Payment?> CreatePaymentAsync( CreateCommand request )
+    public async Task CreatePaymentAsync( CreateCommand request )
     {
         var response = await httpClient.PostAsJsonAsync(
-            ApiEndpoints.MapVersion( ApiEndpoints.Payments.Create ), request );
-
+            $"{ApiEndpoints.WebApiIdRoute}/{ApiEndpoints.MapVersion( ApiEndpoints.Payments.Create )}", request );
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<Payment>();
     }
 
-    public async Task<Payment?> UpdatePaymentAsync( UpdateCommand request )
+    public async Task UpdatePaymentAsync( UpdateCommand request )
     {
         var response = await httpClient.PutAsJsonAsync(
-            ApiEndpoints.MapVersion( ApiEndpoints.Payments.Update ), request );
-
+            $"{ApiEndpoints.WebApiIdRoute}/{ApiEndpoints.MapVersion( ApiEndpoints.Payments.Update )}", request );
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<Payment>();
     }
 
     public async Task DeletePaymentAsync( Guid id )
     {
         var response = await httpClient.DeleteAsync(
-            $"{ApiEndpoints.MapVersion( ApiEndpoints.Payments.Base )}/{id}" );
-
+            $"{ApiEndpoints.WebApiIdRoute}/{ApiEndpoints.MapVersion( ApiEndpoints.Payments.Base )}/{id}" );
         response.EnsureSuccessStatusCode();
     }
 }

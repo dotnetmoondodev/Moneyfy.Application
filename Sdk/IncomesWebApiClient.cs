@@ -1,52 +1,48 @@
 using System.Net.Http.Json;
 using Application.Incomes;
-using Domain.Incomes;
 
 namespace Application.Sdk;
 
 public class IncomesWebApiClient( HttpClient httpClient )
 {
-    public async Task<Income?> GetIncomeAsync( Guid id )
+    public async Task<IncomesResponse?> GetIncomeAsync( Guid id )
     {
+        // We're using the WebApiIdRoute to ensure that the request is routed 
+        // correctly through the API Gateway (Yarp Reverse Proxy).
         var response = await httpClient.GetAsync(
-            $"{ApiEndpoints.MapVersion( ApiEndpoints.Incomes.Base )}/{id}" );
+            $"{ApiEndpoints.WebApiIdRoute}/{ApiEndpoints.MapVersion( ApiEndpoints.Incomes.Base )}/{id}" );
 
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<Income>();
+        return await response.Content.ReadFromJsonAsync<IncomesResponse>();
     }
 
-    public async Task<IEnumerable<Income>> GetIncomesAsync()
+    public async Task<IEnumerable<IncomesResponse>> GetIncomesAsync()
     {
         var response = await httpClient.GetAsync(
-            ApiEndpoints.MapVersion( ApiEndpoints.Incomes.GetAll ) );
+            $"{ApiEndpoints.WebApiIdRoute}/{ApiEndpoints.MapVersion( ApiEndpoints.Incomes.GetAll )}" );
 
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<IEnumerable<Income>>() ?? [];
+        return await response.Content.ReadFromJsonAsync<IEnumerable<IncomesResponse>>() ?? [];
     }
 
-    public async Task<Income?> CreateIncomeAsync( CreateCommand request )
+    public async Task CreateIncomeAsync( CreateCommand request )
     {
         var response = await httpClient.PostAsJsonAsync(
-            ApiEndpoints.MapVersion( ApiEndpoints.Incomes.Create ), request );
-
+            $"{ApiEndpoints.WebApiIdRoute}/{ApiEndpoints.MapVersion( ApiEndpoints.Incomes.Create )}", request );
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<Income>();
     }
 
-    public async Task<Income?> UpdateIncomeAsync( UpdateCommand request )
+    public async Task UpdateIncomeAsync( UpdateCommand request )
     {
         var response = await httpClient.PutAsJsonAsync(
-            ApiEndpoints.MapVersion( ApiEndpoints.Incomes.Update ), request );
-
+            $"{ApiEndpoints.WebApiIdRoute}/{ApiEndpoints.MapVersion( ApiEndpoints.Incomes.Update )}", request );
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<Income>();
     }
 
     public async Task DeleteIncomeAsync( Guid id )
     {
         var response = await httpClient.DeleteAsync(
-            $"{ApiEndpoints.MapVersion( ApiEndpoints.Incomes.Base )}/{id}" );
-
+            $"{ApiEndpoints.WebApiIdRoute}/{ApiEndpoints.MapVersion( ApiEndpoints.Incomes.Base )}/{id}" );
         response.EnsureSuccessStatusCode();
     }
 }

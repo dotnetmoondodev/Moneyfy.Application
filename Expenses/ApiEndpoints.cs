@@ -6,6 +6,7 @@ public static class ApiEndpoints
     private const string API_BASE = $"api/v{VER_FORMAT}";
 
     public const double CurrentVersion = 1.0;
+    public const string WebApiIdRoute = "expenses";
 
     public static string MapVersion( string endpoint )
     {
@@ -14,7 +15,7 @@ public static class ApiEndpoints
 
     public static class Expenses
     {
-        private const string BASE = $"{API_BASE}/expenses";
+        private const string BASE = $"{API_BASE}/{WebApiIdRoute}";
 
         public const string Create = BASE;
         public const string GetAll = BASE;
