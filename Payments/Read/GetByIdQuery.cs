@@ -9,9 +9,9 @@ public sealed record PaymentsResponse
 {
     public Guid Id { get; set; }
     public string? Description { get; set; }
-    public DateTimeOffset CreationDate { get; set; }
+    public DateTime CreationDate { get; set; }
     public decimal Value { get; set; }
     public Currency Currency { get; set; }
-    public bool IsAutoDebit { get; set; }
+    public CustomAnswer IsAutoDebit { get; set; }
     public string? PaymentMediaReference { get; set; }
 }

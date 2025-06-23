@@ -57,13 +57,13 @@ internal class UpdateCommandValidator: AbstractValidator<UpdateCommand>
 
         RuleFor( x => x.DateToSend )
             .NotNull()
-            .Must( x => x > DateTimeOffset.Now )
+            .Must( x => x > DateTime.Now )
             .WithMessage( "DateToSend is required and must be a future date." );
 
         RuleFor( x => x.HourToSend )
             .NotNull()
-            .InclusiveBetween( 0, 23 )
-            .WithMessage( "HourToSend is required and must be between 0 and 23." );
+            .IsInEnum()
+            .WithMessage( "HourToSend is required and must be a valid CustomHours value." );
 
         RuleFor( x => x.Frequency )
             .NotNull()
@@ -77,13 +77,13 @@ internal class UpdateCommandValidator: AbstractValidator<UpdateCommand>
 
         RuleFor( x => x.Repeatable )
             .NotNull()
-            .InclusiveBetween( false, true )
-            .WithMessage( "Repeatable is required and must be either true or false." );
+            .IsInEnum()
+            .WithMessage( "Repeatable is required and must be a valid CustomAnswer value." );
 
         RuleFor( x => x.Enable )
             .NotNull()
-            .InclusiveBetween( false, true )
-            .WithMessage( "Enable is required and must be either true or false." );
+            .IsInEnum()
+            .WithMessage( "Enable is required and must be a valid CustomAnswer value." );
 
         RuleFor( x => x.Email )
             .EmailAddress()

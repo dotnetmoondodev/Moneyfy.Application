@@ -37,8 +37,8 @@ internal class CreateCommandValidator: CommandValidator<CreateCommand>
 
         RuleFor( x => x.IsAutoDebit )
             .NotNull()
-            .InclusiveBetween( false, true )
-            .WithMessage( "IsAutoDebit must be either true (1) or false (0)." );
+            .IsInEnum()
+            .WithMessage( "IsAutoDebit is required and must be a valid enum value." );
 
         RuleFor( x => x.PaymentMediaReference )
             .NotEmpty()
