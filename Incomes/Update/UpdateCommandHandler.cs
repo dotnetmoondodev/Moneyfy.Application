@@ -26,7 +26,7 @@ public sealed class UpdateCommandHandler(
             throw new NotFoundIncomeException( command.Id );
 
         income.Update(
-            command.Description,
+            command.Description!,
             command.Value,
             command.Source,
             command.WithHolding );
@@ -48,7 +48,7 @@ internal class UpdateCommandValidator: CommandValidator<UpdateCommand>
             .WithMessage( "Source is required." );
 
         RuleFor( x => x.WithHolding )
-            .GreaterThan( 0 )
+            .GreaterThanOrEqualTo( 0 )
             .WithMessage( "WithHolding must be a positive number." );
     }
 }

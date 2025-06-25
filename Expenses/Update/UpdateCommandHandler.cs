@@ -26,7 +26,7 @@ public sealed class UpdateCommandHandler(
             throw new NotFoundExpenseException( command.Id );
 
         expense.Update(
-            command.Description,
+            command.Description!,
             command.Value );
 
         await repository.UpdateAsync( expense, cancellationToken );

@@ -29,12 +29,12 @@ public sealed class GetByIdQueryHandler(
             .Select( item => new PaymentsResponse()
             {
                 Id = item.Id,
-                Description = item.Description,
+                Description = item.Description!,
                 Value = item.Value,
                 CreationDate = item.CreationDate,
                 Currency = item.Currency,
                 IsAutoDebit = item.IsAutoDebit,
-                PaymentMediaReference = item.PaymentMediaReference
+                PaymentMediaReference = item.PaymentMediaReference!
             } )
             .FirstOrDefaultAsync( cancellationToken ) ??
                 throw new NotFoundPaymentException( query.Id );

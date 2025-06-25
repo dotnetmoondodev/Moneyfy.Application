@@ -29,7 +29,7 @@ public sealed class GetByIdQueryHandler(
             .Select( item => new NotificationsResponse()
             {
                 Id = item.Id,
-                Description = item.Description,
+                Description = item.Description!,
                 CreationDate = item.CreationDate,
                 DateToSend = item.DateToSend,
                 HourToSend = item.HourToSend,

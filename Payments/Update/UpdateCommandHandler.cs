@@ -26,7 +26,7 @@ public sealed class UpdateCommandHandler(
             throw new NotFoundPaymentException( command.Id );
 
         payment.Update(
-            command.Description,
+            command.Description!,
             command.Value,
             command.Currency,
             command.IsAutoDebit,
@@ -52,11 +52,11 @@ internal class UpdateCommandValidator: CommandValidator<UpdateCommand>
         RuleFor( x => x.IsAutoDebit )
             .NotNull()
             .IsInEnum()
-            .WithMessage( "IsAutoDebit is required and must be a valid enum value." );
+            .WithMessage( "Is Auto Debit is required and must be a valid enum value." );
 
         RuleFor( x => x.PaymentMediaReference )
             .NotEmpty()
             .MaximumLength( 128 )
-            .WithMessage( "PaymentMediaReference is required and must not exceed 128 characters." );
+            .WithMessage( "Payment Method is required and must not exceed 128 characters." );
     }
 }

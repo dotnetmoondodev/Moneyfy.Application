@@ -35,7 +35,7 @@ internal class CreateCommandValidator: CommandValidator<CreateCommand>
             .WithMessage( "Source is required." );
 
         RuleFor( x => x.WithHolding )
-            .GreaterThan( 0 )
+            .GreaterThanOrEqualTo( 0 )
             .WithMessage( "WithHolding must be a positive number." );
     }
 }

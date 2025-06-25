@@ -27,7 +27,7 @@ public sealed class UpdateCommandHandler(
             throw new NotFoundNotificationException( command.Id );
 
         notification.Update(
-            command.Description,
+            command.Description!,
             command.DateToSend,
             command.HourToSend,
             command.Frequency,
@@ -58,12 +58,12 @@ internal class UpdateCommandValidator: AbstractValidator<UpdateCommand>
         RuleFor( x => x.DateToSend )
             .NotNull()
             .Must( x => x > DateTime.Now )
-            .WithMessage( "DateToSend is required and must be a future date." );
+            .WithMessage( "Date to Send is required and must be a future date." );
 
         RuleFor( x => x.HourToSend )
             .NotNull()
             .IsInEnum()
-            .WithMessage( "HourToSend is required and must be a valid CustomHours value." );
+            .WithMessage( "Hour to Send is required and must be a valid CustomHours value." );
 
         RuleFor( x => x.Frequency )
             .NotNull()
@@ -91,7 +91,7 @@ internal class UpdateCommandValidator: AbstractValidator<UpdateCommand>
             .WithMessage( "Email is required and must be a valid email address." );
 
         RuleFor( x => x.PhoneNumber )
-            .Matches( @"^\+?[1-9]\d{1,14}$" )
+            .Matches( @"^\+?[1-9]\d{9,14}$" )
             .When( x => x.Method == NotificationMethod.Sms || x.Method == NotificationMethod.PushNotification )
             .WithMessage( "PhoneNumber is required and must be a valid phone number." );
     }

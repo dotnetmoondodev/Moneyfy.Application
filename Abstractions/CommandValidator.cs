@@ -13,6 +13,6 @@ public abstract class CommandValidator<T>: AbstractValidator<T> where T : BaseCo
 
         RuleFor( x => x.Value )
             .GreaterThan( 0 )
-            .WithMessage( "Value must be a positive number." );
+            .WithMessage( "Value must be greater than $0." );
     }
 }

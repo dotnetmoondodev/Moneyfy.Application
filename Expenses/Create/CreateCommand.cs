@@ -12,7 +12,7 @@ internal static partial class CreateCommandExtensions
         return command is null ?
             throw new ArgumentNullException( nameof( command ) ) :
             new Expense(
-                command.Description,
+                command.Description!,
                 command.Value );
     }
 }

@@ -29,10 +29,10 @@ public sealed class GetByIdQueryHandler(
             .Select( item => new IncomesResponse()
             {
                 Id = item.Id,
-                Description = item.Description,
+                Description = item.Description!,
                 Value = item.Value,
                 CreationDate = item.CreationDate,
-                Source = item.Source,
+                Source = item.Source!,
                 Withholding = item.Withholding
             } )
             .FirstOrDefaultAsync( cancellationToken ) ??
