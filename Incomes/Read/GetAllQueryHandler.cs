@@ -1,27 +1,26 @@
 using Application.Abstractions;
-using Microsoft.EntityFrameworkCore;
+using Domain.Incomes;
 
 namespace Application.Incomes;
 
-public interface IQueryAllHandler: IQueryHandler<IEnumerable<IncomesResponse>> { }
+public interface IQueryAllHandler: IQueryHandler<IReadOnlyCollection<IncomesResponse>> { }
 
 internal sealed class GetAllQueryHandler(
-    IAppDbContext dbContext )
+    IIncomesRepository repository )
     : IQueryAllHandler
 {
-    public async Task<IEnumerable<IncomesResponse>> Execute(
+    public async Task<IReadOnlyCollection<IncomesResponse>> Execute(
         CancellationToken cancellationToken = default )
     {
-        return await dbContext.Incomes
-            .Select( item => new IncomesResponse()
-            {
-                Id = item.Id,
-                Description = item.Description!,
-                Value = item.Value,
-                CreationDate = item.CreationDate,
-                Source = item.Source!,
-                Withholding = item.Withholding
-            } )
-            .ToListAsync( cancellationToken );
+        var records = await repository.GetAllAsync( null, cancellationToken );
+        return [.. records.Select( item => new IncomesResponse()
+        {
+            Id = item.Id,
+            Description = item.Description!,
+            Value = item.Value,
+            CreationDate = item.CreationDate,
+            Source = item.Source!,
+            Withholding = item.Withholding
+        } )];
     }
 }

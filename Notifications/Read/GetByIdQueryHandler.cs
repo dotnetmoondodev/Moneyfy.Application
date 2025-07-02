@@ -1,14 +1,13 @@
 using Application.Abstractions;
 using Domain.Notifications;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Notifications;
 
 public interface IQueryOneHandler: IQueryHandler<GetByIdQuery, NotificationsResponse> { }
 
 public sealed class GetByIdQueryHandler(
-    IAppDbContext dbContext )
+    INotificationsRepository repository )
     : IQueryOneHandler
 {
     public async Task<NotificationsResponse> Execute(
@@ -24,27 +23,24 @@ public sealed class GetByIdQueryHandler(
             throw new ValidationException( result.Errors );
         }
 
-        var notification = await dbContext.Notifications
-            .Where( item => item.Id == query.Id )
-            .Select( item => new NotificationsResponse()
-            {
-                Id = item.Id,
-                Description = item.Description!,
-                CreationDate = item.CreationDate,
-                DateToSend = item.DateToSend,
-                HourToSend = item.HourToSend,
-                Frequency = item.Frequency,
-                Method = item.Method,
-                PaymentId = item.PaymentId,
-                Repeatable = item.Repeatable,
-                Enable = item.Enable,
-                Email = item.Email,
-                PhoneNumber = item.PhoneNumber
-            } )
-            .FirstOrDefaultAsync( cancellationToken ) ??
-                throw new NotFoundNotificationException( query.Id );
+        var notification = await repository.GetByIdAsync( query.Id, cancellationToken ) ??
+            throw new NotFoundNotificationException( query.Id );
 
-        return notification;
+        return new NotificationsResponse()
+        {
+            Id = notification.Id,
+            Description = notification.Description!,
+            CreationDate = notification.CreationDate,
+            DateToSend = notification.DateToSend,
+            HourToSend = notification.HourToSend,
+            Frequency = notification.Frequency,
+            Method = notification.Method,
+            PaymentId = notification.PaymentId,
+            Repeatable = notification.Repeatable,
+            Enable = notification.Enable,
+            Email = notification.Email,
+            PhoneNumber = notification.PhoneNumber
+        };
     }
 }
 

@@ -1,28 +1,27 @@
 using Application.Abstractions;
-using Microsoft.EntityFrameworkCore;
+using Domain.Payments;
 
 namespace Application.Payments;
 
-public interface IQueryAllHandler: IQueryHandler<IEnumerable<PaymentsResponse>> { }
+public interface IQueryAllHandler: IQueryHandler<IReadOnlyCollection<PaymentsResponse>> { }
 
 internal sealed class GetAllQueryHandler(
-    IAppDbContext dbContext )
+    IPaymentsRepository repository )
     : IQueryAllHandler
 {
-    public async Task<IEnumerable<PaymentsResponse>> Execute(
+    public async Task<IReadOnlyCollection<PaymentsResponse>> Execute(
         CancellationToken cancellationToken = default )
     {
-        return await dbContext.Payments
-            .Select( item => new PaymentsResponse()
-            {
-                Id = item.Id,
-                Description = item.Description!,
-                Value = item.Value,
-                CreationDate = item.CreationDate,
-                Currency = item.Currency,
-                IsAutoDebit = item.IsAutoDebit,
-                PaymentMediaReference = item.PaymentMediaReference!
-            } )
-            .ToListAsync( cancellationToken );
+        var records = await repository.GetAllAsync( null, cancellationToken );
+        return [.. records.Select( item => new PaymentsResponse()
+        {
+            Id = item.Id,
+            Description = item.Description!,
+            Value = item.Value,
+            CreationDate = item.CreationDate,
+            Currency = item.Currency,
+            IsAutoDebit = item.IsAutoDebit,
+            PaymentMediaReference = item.PaymentMediaReference!
+        } )];
     }
 }

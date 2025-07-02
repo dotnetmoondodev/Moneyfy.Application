@@ -1,14 +1,13 @@
 using Application.Abstractions;
 using Domain.Expenses;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Expenses;
 
 public interface IQueryOneHandler: IQueryHandler<GetByIdQuery, ExpensesResponse> { }
 
 public sealed class GetByIdQueryHandler(
-    IAppDbContext dbContext )
+    IExpensesRepository repository )
     : IQueryOneHandler
 {
     public async Task<ExpensesResponse> Execute(
@@ -24,19 +23,16 @@ public sealed class GetByIdQueryHandler(
             throw new ValidationException( result.Errors );
         }
 
-        var expense = await dbContext.Expenses
-            .Where( item => item.Id == query.Id )
-            .Select( item => new ExpensesResponse()
-            {
-                Id = item.Id,
-                Description = item.Description,
-                Value = item.Value,
-                CreationDate = item.CreationDate
-            } )
-            .FirstOrDefaultAsync( cancellationToken ) ??
-                throw new NotFoundExpenseException( query.Id );
+        var expense = await repository.GetByIdAsync( query.Id, cancellationToken ) ??
+            throw new NotFoundExpenseException( query.Id );
 
-        return expense;
+        return new ExpensesResponse()
+        {
+            Id = expense.Id,
+            Description = expense.Description,
+            Value = expense.Value,
+            CreationDate = expense.CreationDate
+        };
     }
 }
 

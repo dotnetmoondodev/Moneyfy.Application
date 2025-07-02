@@ -1,25 +1,24 @@
 using Application.Abstractions;
-using Microsoft.EntityFrameworkCore;
+using Domain.Expenses;
 
 namespace Application.Expenses;
 
-public interface IQueryAllHandler: IQueryHandler<IEnumerable<ExpensesResponse>> { }
+public interface IQueryAllHandler: IQueryHandler<IReadOnlyCollection<ExpensesResponse>> { }
 
 internal sealed class GetAllQueryHandler(
-    IAppDbContext dbContext )
+    IExpensesRepository repository )
     : IQueryAllHandler
 {
-    public async Task<IEnumerable<ExpensesResponse>> Execute(
+    public async Task<IReadOnlyCollection<ExpensesResponse>> Execute(
         CancellationToken cancellationToken = default )
     {
-        return await dbContext.Expenses
-            .Select( item => new ExpensesResponse()
-            {
-                Id = item.Id,
-                Description = item.Description,
-                Value = item.Value,
-                CreationDate = item.CreationDate
-            } )
-            .ToListAsync( cancellationToken );
+        var records = await repository.GetAllAsync( null, cancellationToken );
+        return [.. records.Select( item => new ExpensesResponse()
+        {
+            Id = item.Id,
+            Description = item.Description,
+            Value = item.Value,
+            CreationDate = item.CreationDate
+        } )];
     }
 }

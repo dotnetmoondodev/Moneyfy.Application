@@ -1,14 +1,13 @@
 using Application.Abstractions;
 using Domain.Incomes;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 
 namespace Application.Incomes;
 
 public interface IQueryOneHandler: IQueryHandler<GetByIdQuery, IncomesResponse> { }
 
 public sealed class GetByIdQueryHandler(
-    IAppDbContext dbContext )
+    IIncomesRepository repository )
     : IQueryOneHandler
 {
     public async Task<IncomesResponse> Execute(
@@ -24,21 +23,18 @@ public sealed class GetByIdQueryHandler(
             throw new ValidationException( result.Errors );
         }
 
-        var income = await dbContext.Incomes
-            .Where( item => item.Id == query.Id )
-            .Select( item => new IncomesResponse()
-            {
-                Id = item.Id,
-                Description = item.Description!,
-                Value = item.Value,
-                CreationDate = item.CreationDate,
-                Source = item.Source!,
-                Withholding = item.Withholding
-            } )
-            .FirstOrDefaultAsync( cancellationToken ) ??
-                throw new NotFoundIncomeException( query.Id );
+        var income = await repository.GetByIdAsync( query.Id, cancellationToken ) ??
+            throw new NotFoundIncomeException( query.Id );
 
-        return income;
+        return new IncomesResponse()
+        {
+            Id = income.Id,
+            Description = income.Description!,
+            Value = income.Value,
+            CreationDate = income.CreationDate,
+            Source = income.Source!,
+            Withholding = income.Withholding
+        };
     }
 }
 
