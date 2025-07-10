@@ -26,6 +26,7 @@ public static class ApiSettings
     public static string Authority => $"{nameof( ApiSettings )}:Authority";
     public static string Audience => $"{nameof( ApiSettings )}:Audience";
     public static string DBConnection => $"{nameof( ApiSettings )}:DBConnection";
+    public static string KeyVaultName => $"{nameof( ApiSettings )}:KeyVaultName";
     public static string MaxWindowSecondsTimeout => $"{nameof( ApiSettings )}:MaxWindowSecondsTimeout";
     public static string MaxPermitCounters => $"{nameof( ApiSettings )}:MaxPermitCounters";
 }

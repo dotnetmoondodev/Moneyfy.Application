@@ -1,5 +1,6 @@
 using Application.Abstractions;
 using Domain.Incomes;
+using Domain;
 using FluentValidation;
 
 namespace Application.Incomes;
@@ -7,7 +8,7 @@ namespace Application.Incomes;
 public interface IQueryOneHandler: IQueryHandler<GetByIdQuery, IncomesResponse> { }
 
 public sealed class GetByIdQueryHandler(
-    IIncomesRepository repository )
+    IRepository<Income> repository )
     : IQueryOneHandler
 {
     public async Task<IncomesResponse> Execute(

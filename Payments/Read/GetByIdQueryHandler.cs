@@ -1,5 +1,6 @@
 using Application.Abstractions;
 using Domain.Payments;
+using Domain;
 using FluentValidation;
 
 namespace Application.Payments;
@@ -7,7 +8,7 @@ namespace Application.Payments;
 public interface IQueryOneHandler: IQueryHandler<GetByIdQuery, PaymentsResponse> { }
 
 public sealed class GetByIdQueryHandler(
-    IPaymentsRepository repository )
+    IRepository<Payment> repository )
     : IQueryOneHandler
 {
     public async Task<PaymentsResponse> Execute(

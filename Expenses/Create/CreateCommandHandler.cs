@@ -1,5 +1,6 @@
 using Application.Abstractions;
 using Domain.Expenses;
+using Domain;
 using FluentValidation;
 
 namespace Application.Expenses;
@@ -7,7 +8,7 @@ namespace Application.Expenses;
 public interface ICreateCommandHandler: ICommandHandler<CreateCommand> { }
 
 public sealed class CreateCommandHandler(
-    IExpensesRepository repository )
+    IRepository<Expense> repository )
     : ICreateCommandHandler
 {
     public async Task Execute( CreateCommand command, CancellationToken cancellationToken = default )

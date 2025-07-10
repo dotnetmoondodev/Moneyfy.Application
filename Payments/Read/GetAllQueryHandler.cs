@@ -1,12 +1,13 @@
 using Application.Abstractions;
 using Domain.Payments;
+using Domain;
 
 namespace Application.Payments;
 
 public interface IQueryAllHandler: IQueryHandler<IReadOnlyCollection<PaymentsResponse>> { }
 
 internal sealed class GetAllQueryHandler(
-    IPaymentsRepository repository )
+    IRepository<Payment> repository )
     : IQueryAllHandler
 {
     public async Task<IReadOnlyCollection<PaymentsResponse>> Execute(

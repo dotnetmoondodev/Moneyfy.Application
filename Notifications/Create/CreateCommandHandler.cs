@@ -1,6 +1,7 @@
 using Application.Abstractions;
 using Domain.Notifications;
 using Domain.Primitives;
+using Domain;
 using FluentValidation;
 
 namespace Application.Notifications;
@@ -8,7 +9,7 @@ namespace Application.Notifications;
 public interface ICreateCommandHandler: ICommandHandler<CreateCommand> { }
 
 public sealed class CreateCommandHandler(
-    INotificationsRepository repository )
+    IRepository<Notification> repository )
     : ICreateCommandHandler
 {
     public async Task Execute( CreateCommand command, CancellationToken cancellationToken = default )

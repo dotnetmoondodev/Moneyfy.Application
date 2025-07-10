@@ -1,12 +1,13 @@
 using Application.Abstractions;
 using Domain.Notifications;
+using Domain;
 
 namespace Application.Notifications;
 
 public interface IQueryAllHandler: IQueryHandler<IReadOnlyCollection<NotificationsResponse>> { }
 
 internal sealed class GetAllQueryHandler(
-    INotificationsRepository repository )
+    IRepository<Notification> repository )
     : IQueryAllHandler
 {
     public async Task<IReadOnlyCollection<NotificationsResponse>> Execute(

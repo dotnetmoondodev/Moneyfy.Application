@@ -1,5 +1,6 @@
 using Application.Abstractions;
 using Domain.Notifications;
+using Domain;
 using FluentValidation;
 
 namespace Application.Notifications;
@@ -7,7 +8,7 @@ namespace Application.Notifications;
 public interface IDeleteCommandHandler: ICommandHandler<DeleteCommand> { }
 
 public sealed class DeleteCommandHandler(
-    INotificationsRepository repository )
+    IRepository<Notification> repository )
     : IDeleteCommandHandler
 {
     public async Task Execute( DeleteCommand command, CancellationToken cancellationToken = default )

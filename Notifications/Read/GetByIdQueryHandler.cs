@@ -1,5 +1,6 @@
 using Application.Abstractions;
 using Domain.Notifications;
+using Domain;
 using FluentValidation;
 
 namespace Application.Notifications;
@@ -7,7 +8,7 @@ namespace Application.Notifications;
 public interface IQueryOneHandler: IQueryHandler<GetByIdQuery, NotificationsResponse> { }
 
 public sealed class GetByIdQueryHandler(
-    INotificationsRepository repository )
+    IRepository<Notification> repository )
     : IQueryOneHandler
 {
     public async Task<NotificationsResponse> Execute(

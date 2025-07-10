@@ -1,5 +1,6 @@
 using Application.Abstractions;
 using Domain.Expenses;
+using Domain;
 using FluentValidation;
 
 namespace Application.Expenses;
@@ -7,7 +8,7 @@ namespace Application.Expenses;
 public interface IQueryOneHandler: IQueryHandler<GetByIdQuery, ExpensesResponse> { }
 
 public sealed class GetByIdQueryHandler(
-    IExpensesRepository repository )
+    IRepository<Expense> repository )
     : IQueryOneHandler
 {
     public async Task<ExpensesResponse> Execute(

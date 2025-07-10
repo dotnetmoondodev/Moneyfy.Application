@@ -1,5 +1,6 @@
 using Application.Abstractions;
 using Domain.Incomes;
+using Domain;
 using FluentValidation;
 
 namespace Application.Incomes;
@@ -7,7 +8,7 @@ namespace Application.Incomes;
 public interface IDeleteCommandHandler: ICommandHandler<DeleteCommand> { }
 
 public sealed class DeleteCommandHandler(
-    IIncomesRepository repository )
+    IRepository<Income> repository )
     : IDeleteCommandHandler
 {
     public async Task Execute( DeleteCommand command, CancellationToken cancellationToken = default )

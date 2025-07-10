@@ -1,5 +1,6 @@
 using Application.Abstractions;
 using Domain.Payments;
+using Domain;
 using FluentValidation;
 
 namespace Application.Payments;
@@ -7,7 +8,7 @@ namespace Application.Payments;
 public interface IUpdateCommandHandler: ICommandHandler<UpdateCommand> { }
 
 public sealed class UpdateCommandHandler(
-    IPaymentsRepository repository )
+    IRepository<Payment> repository )
     : IUpdateCommandHandler
 {
     public async Task Execute( UpdateCommand command, CancellationToken cancellationToken = default )

@@ -1,5 +1,6 @@
 using Application.Abstractions;
 using Domain.Payments;
+using Domain;
 using FluentValidation;
 
 namespace Application.Payments;
@@ -7,7 +8,7 @@ namespace Application.Payments;
 public interface IDeleteCommandHandler: ICommandHandler<DeleteCommand> { }
 
 public sealed class DeleteCommandHandler(
-    IPaymentsRepository repository )
+    IRepository<Payment> repository )
     : IDeleteCommandHandler
 {
     public async Task Execute( DeleteCommand command, CancellationToken cancellationToken = default )
