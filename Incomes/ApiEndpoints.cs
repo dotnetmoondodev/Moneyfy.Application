@@ -3,10 +3,10 @@ namespace Application.Incomes;
 public static class ApiEndpoints
 {
     private const string VER_FORMAT = "{v:apiVersion}";
-    private const string API_BASE = $"api/v{VER_FORMAT}";
+    private const string API_BASE = $"{WebApiBaseUrl}/api/v{VER_FORMAT}";
 
     public const double CurrentVersion = 1.0;
-    public const string WebApiIdRoute = "incomes";
+    public const string WebApiBaseUrl = "incomes";
 
     public static string MapVersion( string endpoint )
     {
@@ -15,7 +15,7 @@ public static class ApiEndpoints
 
     public static class Incomes
     {
-        private const string BASE = $"{API_BASE}/{WebApiIdRoute}";
+        private const string BASE = API_BASE;
 
         public const string Create = BASE;
         public const string GetAll = BASE;
