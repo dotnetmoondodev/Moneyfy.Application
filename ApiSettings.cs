@@ -29,4 +29,12 @@ public static class ApiSettings
     public static string KeyVaultName => $"{nameof( ApiSettings )}:KeyVaultName";
     public static string MaxWindowSecondsTimeout => $"{nameof( ApiSettings )}:MaxWindowSecondsTimeout";
     public static string MaxPermitCounters => $"{nameof( ApiSettings )}:MaxPermitCounters";
+
+    public static string MaskStrValue( string strValue )
+    {
+        if ( strValue.Length < 4 )
+            return new string( '*', strValue.Length );
+
+        return new string( '*', strValue.Length - 4 ) + strValue[^4..];
+    }
 }
