@@ -93,7 +93,7 @@ internal class UpdateCommandValidator: AbstractValidator<UpdateCommand>
 
         RuleFor( x => x.PhoneNumber )
             .Matches( @"^\+?[1-9]\d{9,14}$" )
-            .When( x => x.Method == NotificationMethod.Sms || x.Method == NotificationMethod.PushNotification )
+            .When( x => x.Method == NotificationMethod.Sms || x.Method == NotificationMethod.Push )
             .WithMessage( "PhoneNumber is required and must be a valid phone number." );
     }
 }

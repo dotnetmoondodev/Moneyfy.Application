@@ -46,6 +46,6 @@ public sealed record NotificationsResponse
     [EmailRequired( nameof( Method ), NotificationMethod.Email )]
     public string? Email { get; set; }
 
-    [PhoneRequired( nameof( Method ), [NotificationMethod.Sms, NotificationMethod.PushNotification] )]
+    [PhoneRequired( nameof( Method ), [NotificationMethod.Sms, NotificationMethod.Push] )]
     public string? PhoneNumber { get; set; }
 }
