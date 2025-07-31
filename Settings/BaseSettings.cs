@@ -2,15 +2,13 @@ namespace Application.Settings;
 
 public abstract class BaseSettings
 {
-    public string? ServiceName { get; init; }
     public string? Authority { get; init; }
     public string? Audience { get; init; }
     public string? SeqServerUrl { get; init; }
 
     public virtual bool DataIsValid()
     {
-        return !string.IsNullOrEmpty( ServiceName ) &&
-            !string.IsNullOrEmpty( Authority ) &&
+        return !string.IsNullOrEmpty( Authority ) &&
             !string.IsNullOrEmpty( Audience ) &&
             !string.IsNullOrEmpty( SeqServerUrl );
     }
