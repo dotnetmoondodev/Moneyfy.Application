@@ -13,7 +13,7 @@ internal sealed class GetAllQueryHandler(
     public async Task<IReadOnlyCollection<NotificationsResponse>> Execute(
         CancellationToken cancellationToken = default )
     {
-        var records = await repository.GetAllAsync( null, cancellationToken );
+        var records = await repository.GetAllAsync( cancellationToken );
         return [.. records.Select( item => new NotificationsResponse()
         {
             Id = item.Id,

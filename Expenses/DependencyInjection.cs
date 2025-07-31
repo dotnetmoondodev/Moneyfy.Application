@@ -1,6 +1,6 @@
-using Microsoft.Extensions.DependencyInjection;
-
 namespace Application.Expenses;
+
+using Microsoft.Extensions.DependencyInjection;
 
 public static class ExpenseExtensions
 {
